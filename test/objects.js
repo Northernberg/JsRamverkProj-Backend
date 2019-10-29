@@ -53,8 +53,8 @@ describe('Objects', () => {
                                 price: 55,
                             })
                             .then(res => {
-                                done();
                                 client.close();
+                                done();
                             })
                             .catch(err => {
                                 console.log(err);
@@ -142,24 +142,19 @@ describe('Objects', () => {
                     .deleteOne({
                         userEmail: 'object@test.com',
                     })
-                    .then(res => {
-                        done();
-                        client.close();
-                    })
                     .catch(err => {
                         console.log(err);
                     });
-                db.collection('objects')
+                await db
+                    .collection('objects')
                     .deleteOne({
                         name: 'PeasoupTest',
                     })
-                    .then(res => {
-                        done();
-                        client.close();
-                    })
                     .catch(err => {
                         console.log(err);
                     });
+                done();
+                client.close();
             }
         );
     });

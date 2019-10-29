@@ -112,7 +112,7 @@ router.post('/sell', (req, res) => {
                     'stocks.name': req.body.name,
                     'stocks.qty': { $gte: req.body.amount },
                 },
-                (err, result) => {
+                async (err, result) => {
                     if (err || result === null) {
                         return res
                             .status(422)
@@ -122,7 +122,7 @@ router.post('/sell', (req, res) => {
                         res.status(422).json('Not enough stocks');
                         return;
                     }
-                    db.collection('userStocks').updateOne(
+                    await db.collection('userStocks').updateOne(
                         {
                             userEmail: req.body.email,
                             'stocks.name': req.body.name,
@@ -139,7 +139,7 @@ router.post('/sell', (req, res) => {
                             }
                         }
                     );
-                    db.collection('objects').findOneAndUpdate(
+                    await db.collection('objects').findOneAndUpdate(
                         {
                             name: req.body.name,
                         },
@@ -193,7 +193,7 @@ router.post('/buy', (req, res) => {
 
             db.collection('userStocks').findOne(
                 { userEmail: req.body.email },
-                (err, result) => {
+                async (err, result) => {
                     if (err) {
                         return res.status(422).json('Cannot find user');
                     }
@@ -201,7 +201,7 @@ router.post('/buy', (req, res) => {
                         res.status(422).json('Insufficient balance');
                         return;
                     }
-                    db.collection('userStocks').updateOne(
+                    await db.collection('userStocks').updateOne(
                         {
                             userEmail: req.body.email,
                             'stocks.name': req.body.name,
@@ -218,7 +218,7 @@ router.post('/buy', (req, res) => {
                             }
                         }
                     );
-                    db.collection('objects').findOneAndUpdate(
+                    await db.collection('objects').findOneAndUpdate(
                         {
                             name: req.body.name,
                         },
