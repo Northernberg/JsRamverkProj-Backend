@@ -48,7 +48,7 @@ describe('Objects', () => {
 
                         db.collection('objects')
                             .insertOne({
-                                name: 'Peasoup',
+                                name: 'PeasoupTest',
                                 qty: 10,
                                 price: 55,
                             })
@@ -76,7 +76,7 @@ describe('Objects', () => {
             .post('/objects/find')
             .send({
                 _method: 'post',
-                name: 'Peasoup',
+                name: 'PeasoupTest',
             })
             .end((err, res) => {
                 res.should.have.status(200);
@@ -98,7 +98,7 @@ describe('Objects', () => {
             .post('/objects/buy')
             .send({
                 _method: 'post',
-                name: 'Peasoup',
+                name: 'PeasoupTest',
                 email: 'object@test.com',
                 amount: 1,
                 totalPrice: 100,
@@ -115,7 +115,7 @@ describe('Objects', () => {
             .post('/objects/sell')
             .send({
                 _method: 'post',
-                name: 'Peasoup',
+                name: 'PeasoupTest',
                 email: 'object@test.com',
                 amount: 1,
                 totalPrice: 100,
@@ -134,12 +134,24 @@ describe('Objects', () => {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             },
-            (err, client) => {
+            async (err, client) => {
                 const db = client.db(dbName);
 
-                db.collection('userStocks')
+                await db
+                    .collection('userStocks')
                     .deleteOne({
                         userEmail: 'object@test.com',
+                    })
+                    .then(res => {
+                        done();
+                        client.close();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                db.collection('objects')
+                    .deleteOne({
+                        name: 'PeasoupTest',
                     })
                     .then(res => {
                         done();
