@@ -37,7 +37,30 @@ describe('Objects', () => {
             })
             .end((err, res) => {
                 res.should.have.status(201);
-                done();
+                MongoClient.connect(
+                    url,
+                    {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true,
+                    },
+                    (err, client) => {
+                        const db = client.db(dbName);
+
+                        db.collection('objects')
+                            .insertOne({
+                                name: 'Peasoup',
+                                qty: 10,
+                                price: 55,
+                            })
+                            .then(res => {
+                                done();
+                                client.close();
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    }
+                );
             });
     });
     it('200, Get all objects', done => {
