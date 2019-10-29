@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-const reports = require('./routes/reports');
 const register = require('./routes/register');
 const login = require('./routes/login');
 const objects = require('./routes/objects');
@@ -29,7 +28,6 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 }
 
-app.use('/reports', reports);
 app.use('/register', register);
 app.use('/login', login);
 app.use('/objects', objects);

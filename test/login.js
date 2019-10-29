@@ -20,7 +20,7 @@ describe('Login', () => {
                 _method: 'post',
                 firstname: 'test',
                 lastname: 'karlsson',
-                email: 'test@testsson.se',
+                email: 'test@testtsson.se',
                 password: 'test12345',
                 birthdate: '1997-09-30',
             })
@@ -34,7 +34,7 @@ describe('Login', () => {
             .post('/login')
             .send({
                 _method: 'post',
-                email: 'test@testsson.se',
+                email: 'test@testtsson.se',
                 password: 'test12345',
             })
             .end((err, res) => {
@@ -50,7 +50,7 @@ describe('Login', () => {
             .post('/login')
             .send({
                 _method: 'post',
-                email: 'test@testsson.se',
+                email: 'test@testtsson.se',
                 password: 'test',
             })
             .end((err, res) => {

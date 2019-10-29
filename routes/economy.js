@@ -24,7 +24,11 @@ router.post('/insert', (req, res) => {
                     { $inc: { balance: 500 } }
                 )
                 .then(result => {
-                    return res.status(201).json(result);
+                    if (result.matchedCount == 0) {
+                        return res.status(422).json('Email error');
+                    } else {
+                        return res.status(201).json(result);
+                    }
                 })
                 .catch(err => {
                     return res.status(422).json(err);

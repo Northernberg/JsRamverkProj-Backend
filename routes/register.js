@@ -38,62 +38,47 @@ router.post(
                                 .status(422)
                                 .send('Error in registration');
                         }
-                        res.status(201).send('Successfully registered');
+                        MongoClient.connect(url, {
+                            useNewUrlParser: true,
+                            useUnifiedTopology: true,
+                        })
+                            .then(async client => {
+                                const db = client.db(dbName);
+                                let currObjects;
+
+                                await db
+                                    .collection('objects')
+                                    .find({})
+                                    .project({
+                                        name: 1,
+                                        img: 1,
+                                        price: 1,
+                                    })
+                                    .toArray()
+                                    .then(result => {
+                                        result.forEach(s => {
+                                            s.qty = 0;
+                                        });
+                                        currObjects = result;
+                                    })
+                                    .catch(err => {
+                                        return res.status(422).json(err);
+                                    });
+
+                                await db.collection('userStocks').insertOne({
+                                    userEmail: req.body.email,
+                                    balance: 500,
+                                    stocks: currObjects,
+                                });
+                                client.close();
+                                res.status(201).send('Successfully registered');
+                            })
+                            .catch(err => {
+                                return res.status(422).json(err);
+                            });
                         // returnera korrekt svar
                     }
                 );
-                MongoClient.connect(url, {
-                    useNewUrlParser: true,
-                    useUnifiedTopology: true,
-                })
-                    .then(client => {
-                        const db = client.db(dbName);
-
-                        db.collection('userStocks').insertOne({
-                            userEmail: req.body.email,
-                            balance: 500,
-                            stocks: [
-                                {
-                                    name: 'Ärtsoppa',
-                                    img: 'artsoppa.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Punsch',
-                                    img: 'punsch.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Ärtsoppakorv',
-                                    img: 'artsoppakorv.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Gulaschsoppa',
-                                    img: 'gulaschsoppa.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Köttsoppa',
-                                    img: 'kottsoppa.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Pannkaka',
-                                    img: 'pannkaka.jpg',
-                                    qty: 0,
-                                },
-                                {
-                                    name: 'Tomatsoppa',
-                                    img: 'tomatsoppa.jpg',
-                                    qty: 0,
-                                },
-                            ],
-                        });
-                    })
-                    .catch(err => {
-                        return res.status(422).json(err);
-                    });
             }
         });
     }

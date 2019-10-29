@@ -98,30 +98,6 @@ router.get('/:userEmail', (req, res) => {
     );
 });
 
-router.post('/insert', (req, res) => {
-    MongoClient.connect(
-        url,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        },
-        (err, client) => {
-            const db = client.db(dbName);
-
-            db.collection('userStocks')
-                .insertOne(req.body.message)
-                .toArray((err, result) => {
-                    if (err) {
-                        return res.status(404).json(err.message);
-                    } else {
-                        return res.status(200).json(result);
-                    }
-                });
-            client.close();
-        }
-    );
-});
-
 router.post('/sell', (req, res) => {
     MongoClient.connect(url, {
         useNewUrlParser: true,
@@ -163,23 +139,32 @@ router.post('/sell', (req, res) => {
                             }
                         }
                     );
-                    db.collection('objects').updateOne(
+                    db.collection('objects').findOneAndUpdate(
                         {
                             name: req.body.name,
                         },
                         {
                             $inc: { qty: parseInt(req.body.amount) }, // Increment negativt och lägga till ökning/minskning av värde
-                            $mul: {
-                                price: 1 + 0.05 * -parseInt(req.body.amount),
+                            $set: {
+                                price: +(
+                                    req.body.price * 1 +
+                                    0.05 * -parseInt(req.body.amount)
+                                ).toFixed(2),
                             },
                             $push: {
                                 history: {
-                                    value: req.body.price,
+                                    value: +(
+                                        req.body.price * 1 +
+                                        0.05 * -parseInt(req.body.amount)
+                                    ).toFixed(2),
                                     time: new Date()
                                         .toLocaleTimeString()
                                         .slice(0, -3),
                                 },
                             },
+                        },
+                        {
+                            returnOriginal: false,
                         },
                         (err, result) => {
                             if (err) {
@@ -226,10 +211,6 @@ router.post('/buy', (req, res) => {
                                 'stocks.$.qty': parseInt(req.body.amount),
                                 balance: -parseInt(req.body.totalPrice),
                             },
-                            $mul: {
-                                'stocks.$.price':
-                                    1 + 0.05 * -parseInt(req.body.amount),
-                            },
                         },
                         err => {
                             if (err) {
@@ -237,23 +218,32 @@ router.post('/buy', (req, res) => {
                             }
                         }
                     );
-                    db.collection('objects').updateOne(
+                    db.collection('objects').findOneAndUpdate(
                         {
                             name: req.body.name,
                         },
                         {
                             $inc: { qty: -parseInt(req.body.amount) }, // Increment negativt och lägga till ökning/minskning av värde
-                            $mul: {
-                                price: 1 + 0.05 * parseInt(req.body.amount),
+                            $set: {
+                                price: +(
+                                    req.body.price * 1 +
+                                    0.05 * parseInt(req.body.amount)
+                                ).toFixed(2),
                             },
                             $push: {
                                 history: {
-                                    value: req.body.price,
+                                    value: +(
+                                        req.body.price * 1 +
+                                        0.05 * parseInt(req.body.amount)
+                                    ).toFixed(2),
                                     time: new Date()
                                         .toLocaleTimeString()
                                         .slice(0, -3),
                                 },
                             },
+                        },
+                        {
+                            returnOriginal: false,
                         },
                         (err, result) => {
                             if (err) {
