@@ -122,7 +122,7 @@ router.post('/sell', (req, res) => {
                         res.status(422).json('Not enough stocks');
                         return;
                     }
-                    await db.collection('userStocks').updateOne(
+                    db.collection('userStocks').updateOne(
                         {
                             userEmail: req.body.email,
                             'stocks.name': req.body.name,
@@ -139,7 +139,7 @@ router.post('/sell', (req, res) => {
                             }
                         }
                     );
-                    await db.collection('objects').findOneAndUpdate(
+                    db.collection('objects').findOneAndUpdate(
                         {
                             name: req.body.name,
                         },

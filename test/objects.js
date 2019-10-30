@@ -25,43 +25,43 @@ chai.use(chaiHttp);
 
 describe('Objects', () => {
     before(done => {
-        chai.request(server)
-            .post('/register')
-            .send({
-                _method: 'post',
-                firstname: 'test',
-                lastname: 'karlsson',
-                email: 'object@test.com',
-                password: 'test12345',
-                birthdate: '1997-09-30',
-            })
-            .end((err, res) => {
-                res.should.have.status(201);
-                MongoClient.connect(
-                    url,
-                    {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true,
-                    },
-                    (err, client) => {
-                        const db = client.db(dbName);
+        MongoClient.connect(
+            url,
+            {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            },
+            (err, client) => {
+                const db = client.db(dbName);
 
-                        db.collection('objects')
-                            .insertOne({
-                                name: 'PeasoupTest',
-                                qty: 10,
-                                price: 55,
+                db.collection('objects')
+                    .insertOne({
+                        name: 'PeasoupTest',
+                        qty: 10,
+                        price: 55,
+                    })
+                    .then(res => {
+                        client.close();
+                        chai.request(server)
+                            .post('/register')
+                            .send({
+                                _method: 'post',
+                                firstname: 'test',
+                                lastname: 'karlsson',
+                                email: 'object@test.com',
+                                password: 'test12345',
+                                birthdate: '1997-09-30',
                             })
-                            .then(res => {
-                                client.close();
+                            .end((err, res) => {
+                                res.should.have.status(201);
                                 done();
-                            })
-                            .catch(err => {
-                                console.log(err);
                             });
-                    }
-                );
-            });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        );
     });
     it('200, Get all objects', done => {
         chai.request(server)
