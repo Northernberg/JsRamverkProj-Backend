@@ -9,8 +9,8 @@ build:
                       coverage:
                           file: coverage/clover.xml
                           format: clover
-        my-node:
-            services:
-                mongo: 4
     environment:
         mongodb: true
+
+    services:
+        mongo: 4
