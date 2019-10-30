@@ -14,5 +14,3 @@ build:
                 mongo: 4
     environment:
         mongodb: true
-    services:
-        mongo: 4
