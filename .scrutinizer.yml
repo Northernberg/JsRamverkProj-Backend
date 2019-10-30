@@ -11,5 +11,5 @@ build:
                       coverage:
                           file: coverage/clover.xml
                           format: clover
-            services:
-                mongo: 4
+        services:
+            mongo: 4
