@@ -4,6 +4,8 @@
 
 [![Build Status](https://scrutinizer-ci.com/g/Northernberg/JsRamverkProj-Backend/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Northernberg/JsRamverkProj-Backend/build-status/master)
 
+[![Build Status](https://travis-ci.org/Northernberg/Jsramverk-back.svg?branch=master)](https://travis-ci.org/Northernberg/Jsramverk-back)
+
 # Setup
 
 ```

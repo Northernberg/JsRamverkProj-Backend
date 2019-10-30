@@ -66,6 +66,10 @@ describe('Objects', () => {
     it('200, Get all objects', done => {
         chai.request(server)
             .get('/objects')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .end((err, res) => {
                 res.should.have.status(200);
                 done();
@@ -74,6 +78,10 @@ describe('Objects', () => {
     it('200 Find one object', done => {
         chai.request(server)
             .post('/objects/find')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .send({
                 _method: 'post',
                 name: 'PeasoupTest',
@@ -87,6 +95,10 @@ describe('Objects', () => {
     it('200 Get user objects', done => {
         chai.request(server)
             .get('/objects/object@test.com')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .end((err, res) => {
                 res.should.have.status(200);
                 done();
@@ -96,6 +108,10 @@ describe('Objects', () => {
     it('200 Buy object', done => {
         chai.request(server)
             .post('/objects/buy')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .send({
                 _method: 'post',
                 name: 'PeasoupTest',
@@ -113,6 +129,10 @@ describe('Objects', () => {
     it('200 Sell object', done => {
         chai.request(server)
             .post('/objects/sell')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .send({
                 _method: 'post',
                 name: 'PeasoupTest',

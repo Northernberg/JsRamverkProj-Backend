@@ -42,6 +42,10 @@ describe('Economy', () => {
     it('201, insert money', done => {
         chai.request(server)
             .post('/economy/insert')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .send({
                 _method: 'post',
                 email: 'test@testsson.se',
@@ -56,11 +60,27 @@ describe('Economy', () => {
     it('422, insert money', done => {
         chai.request(server)
             .post('/economy/insert')
+            .set({
+                'x-access-token': testToken,
+                'Content-type': 'Application/json',
+            })
             .send({
                 _method: 'post',
             })
             .end((err, res) => {
                 res.should.have.status(422);
+
+                done();
+            });
+    });
+    it('422, no token', done => {
+        chai.request(server)
+            .post('/economy/insert')
+            .send({
+                _method: 'post',
+            })
+            .end((err, res) => {
+                res.should.have.status(401);
 
                 done();
             });
