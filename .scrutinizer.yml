@@ -1,4 +1,6 @@
 build:
+    environment:
+        mongodb: true
     nodes:
         coverage:
             tests:
@@ -9,7 +11,5 @@ build:
                       coverage:
                           file: coverage/clover.xml
                           format: clover
-    environment:
-        mongodb: true
-    services:
-        mongo: 4
+            services:
+                mongo: 4

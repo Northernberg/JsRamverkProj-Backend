@@ -6,14 +6,25 @@
 
 # Setup
 
-## Clone Repo
+```
+git clone
+npm install
+```
 
-## Npm install
+# Start application
 
-## Node app.js to start application.
+`Node app.js`
 
 # Tools
 
-MongoDb for storage of user inventory and current market of stocks
-SQlite for user login and registration
-JWT for authentication
+### MongoDb
+
+Used for storage of user inventory and current market of stocks
+
+### SQLite
+
+Used for user information such as login and contact details
+
+### JWT
+
+Used to authenticate requests to the API.
