@@ -11,6 +11,5 @@ build:
                           format: clover
     environment:
         mongodb: true
-
     services:
         mongo: 4
