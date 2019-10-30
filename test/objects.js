@@ -75,6 +75,14 @@ describe('Objects', () => {
                 done();
             });
     });
+    it('422, Get all objects', done => {
+        chai.request(server)
+            .get('/objects')
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
     it('200 Find one object', done => {
         chai.request(server)
             .post('/objects/find')
@@ -104,7 +112,6 @@ describe('Objects', () => {
                 done();
             });
     });
-
     it('200 Buy object', done => {
         chai.request(server)
             .post('/objects/buy')
@@ -146,7 +153,6 @@ describe('Objects', () => {
                 done();
             });
     });
-
     after(done => {
         MongoClient.connect(
             url,

@@ -68,7 +68,7 @@ router.post(
                     .project({})
                     .limit(1)
                     .toArray((err, result) => {
-                        if (err) {
+                        if (err || result === null) {
                             return res.status(404).json(err.message);
                         } else {
                             return res.status(200).json(result);
@@ -98,7 +98,7 @@ router.get(
                     .project({ stocks: 1, balance: 1 })
                     .limit(1)
                     .toArray((err, result) => {
-                        if (err) {
+                        if (err || result === null) {
                             return res.status(404).json(err);
                         } else {
                             return res.status(200).json(result);
