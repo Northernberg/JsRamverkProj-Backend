@@ -157,9 +157,7 @@ router.post('/sell', (req, res) => {
                                         req.body.price * 1 +
                                         0.05 * -parseInt(req.body.amount)
                                     ).toFixed(2),
-                                    time: new Date()
-                                        .toLocaleTimeString()
-                                        .slice(0, -3),
+                                    time: req.body.time,
                                 },
                             },
                         },
@@ -236,9 +234,7 @@ router.post('/buy', (req, res) => {
                                         req.body.price * 1 +
                                         0.05 * parseInt(req.body.amount)
                                     ).toFixed(2),
-                                    time: new Date()
-                                        .toLocaleTimeString()
-                                        .slice(0, -3),
+                                    time: req.body.time,
                                 },
                             },
                         },

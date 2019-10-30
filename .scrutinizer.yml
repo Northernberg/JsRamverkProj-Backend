@@ -3,6 +3,7 @@ build:
         coverage:
             tests:
                 override:
+                    - node db/setup.js
                     - npm run cleandb
                     - command: npm test
                       coverage:
