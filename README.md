@@ -30,9 +30,12 @@ Stand in project folder
 ```
 cat db/migrate.sql | sqlite3 db/users.sqlite
 ```
-# Start application
+# Start api
 
 `node app.js`
+
+# Access api at
+`localhost:9333`
 
 # Tools
 
