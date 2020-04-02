@@ -12,10 +12,27 @@
 git clone https://github.com/Northernberg/JsRamverkProj-Backend.git
 npm install
 ```
+## Install MongoDb
+MongoDb is required, please install according to your OS and start MongoDb service at default 'mongodb://localhost:27017'
 
+[Official MongoDb instructions](https://docs.mongodb.com/manual/installation/)
+
+Then populate the database with products and defined test user
+```
+node db/setup.js
+```
+
+## Setup SQLite
+Setup SQLite db file and migrate with table
+
+
+Stand in project folder
+```
+cat db/migrate.sql | sqlite3 db/users.sqlite
+```
 # Start application
 
-`Node app.js`
+`node app.js`
 
 # Tools
 
