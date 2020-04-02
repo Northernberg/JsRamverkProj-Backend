@@ -28,7 +28,7 @@ Setup SQLite db file and migrate with table
 
 Stand in project folder
 ```
-cat db/migrate.sql | sqlite3 db/test.sqlite
+cat db/migrate.sql | sqlite3 db/users.sqlite
 ```
 # Start application
 
