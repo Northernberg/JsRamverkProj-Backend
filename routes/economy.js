@@ -15,6 +15,7 @@ function checkToken(req, res, next) {
         if (err) {
             return res.status(401).json('Invalid JWT token.');
         }
+        res.decoded = jwt.verify(token, process.env.JWT_SECRET);
         next();
     });
 }
@@ -34,7 +35,7 @@ router.post(
 
                 db.collection('userStocks')
                     .updateOne(
-                        { userEmail: req.body.email },
+                        { userEmail: res.decoded.email },
                         { $inc: { balance: 500 } }
                     )
                     .then(result => {

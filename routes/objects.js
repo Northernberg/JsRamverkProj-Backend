@@ -15,6 +15,7 @@ function checkToken(req, res, next) {
         if (err) {
             return res.status(401).json('Invalid JWT token.');
         }
+        res.body = jwt.verify(token, process.env.JWT_SECRET);
         next();
     });
 }
@@ -163,14 +164,14 @@ router.post(
                                 $set: {
                                     price: +(
                                         req.body.price * 1 +
-                                        0.05 * -parseInt(req.body.amount)
+                                        1 * -parseInt(req.body.amount)
                                     ).toFixed(2),
                                 },
                                 $push: {
                                     history: {
                                         value: +(
                                             req.body.price * 1 +
-                                            0.05 * -parseInt(req.body.amount)
+                                            1 * -parseInt(req.body.amount)
                                         ).toFixed(2),
                                         time: req.body.time,
                                     },
@@ -207,9 +208,10 @@ router.post(
         })
             .then(client => {
                 const db = client.db(dbName);
+                let balance = 0;
 
                 db.collection('userStocks').findOne(
-                    { userEmail: req.body.email },
+                    { userEmail: res.body.email },
                     async (err, result) => {
                         if (err) {
                             return res.status(422).json('Cannot find user');
@@ -220,7 +222,7 @@ router.post(
                         }
                         await db.collection('userStocks').updateOne(
                             {
-                                userEmail: req.body.email,
+                                userEmail: res.body.email,
                                 'stocks.name': req.body.name,
                             },
                             {
@@ -229,10 +231,11 @@ router.post(
                                     balance: -parseInt(req.body.totalPrice),
                                 },
                             },
-                            err => {
+                            (err, user) => {
                                 if (err) {
                                     return res.status(422).json(err.message);
                                 }
+                                balance = user.balance;
                             }
                         );
                         await db.collection('objects').findOneAndUpdate(
@@ -244,14 +247,14 @@ router.post(
                                 $set: {
                                     price: +(
                                         req.body.price * 1 +
-                                        0.05 * parseInt(req.body.amount)
+                                        1 * parseInt(req.body.amount)
                                     ).toFixed(2),
                                 },
                                 $push: {
                                     history: {
                                         value: +(
                                             req.body.price * 1 +
-                                            0.05 * parseInt(req.body.amount)
+                                            1 * parseInt(req.body.amount)
                                         ).toFixed(2),
                                         time: req.body.time,
                                     },
@@ -264,6 +267,7 @@ router.post(
                                 if (err) {
                                     return res.status(422).json(err);
                                 } else {
+                                    result.balance = balance;
                                     return res.status(200).json(result);
                                 }
                             }
